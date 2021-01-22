@@ -5,7 +5,8 @@ describe('Efelya', () => {
               username: 'owner@efelya.com',
               password: 'secret4efelya'
             }})
-         // Forgot your password? переход
+
+           // Forgot your password? переход
          cy.get('[class="mb-6 has-text-right"]').find('a').click()
          cy.get('[class="title mb-6 has-text-centered"]').should('contain', 'Restore my password')
          cy.url().should('include', '/forget')

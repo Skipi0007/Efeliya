@@ -16,6 +16,29 @@ describe('Efelya', () => {
         .find('.ml-2')
         .should('contain', level)}
 
+        let pass = ''
+        
+        let passValidator = (simbol) => {
+            pass = pass+simbol
+            cy.get('#sign-up-form-password').clear().type(pass)
+            return(pass)
+        
+        }
+
+        let emailNum = ''
+
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            emailNum = Math.floor(Math.random() * (max - min)) + min;
+            return emailNum
+          }
+
+          getRandomInt(1, 1000
+            )
+
+        
+
         // пустой email + кнопка log in
         cy.get('#sign-up-form-email').click() 
         cy.get('#sign-up-form-password').click()
@@ -53,46 +76,67 @@ describe('Efelya', () => {
         cy.get('#sign-up-form-password').type('Vi789456!')
         cy.get('#sign-up-form-password').parents('div[class="field"]')
         .find('.is-danger').should('contain', ' ')
-        cy.get('input[type="checkbox"]').check({force:true})
+        cy.get('input[type="checkbox"]').should('not.be.checked')
+        .check({force:true}).should('be.checked')
         cy.get('button[type="submit"]').should('not.have.class', 'disabled')
         cy.get('button[type="submit"]').click()
         cy.get('#sign-up-form-email').parents('div[class="field"]')
         .find('.is-danger').should('contain', 'The email has already been taken.')
         
-         
+        
         // валидация пароля
-        cy.get('#sign-up-form-email').clear().type('seek@mail.ru')
-        cy.get('#sign-up-form-password').clear().type('a')
-        cy.get('#sign-up-form-password').parents('div[class="field"]')
+        cy.get('#sign-up-form-email').clear().type('seek'+emailNum+'@mail.ru')
+        passValidator('a')
         passCounter('The password must be at least 8 characters long')
         warningChecker('Weak')
 
-        cy.get('#sign-up-form-password').clear().type('aA')
+        passValidator('A')
         passCounter('The password must be at least 8 characters long')
         warningChecker('Weak')
 
-        cy.get('#sign-up-form-password').clear().type('aA1')
+        passValidator('1')
         passCounter('The password must be at least 8 characters long')
         warningChecker('Normal')
 
-        cy.get('#sign-up-form-password').clear().type('aA1!')
+        passValidator('!')
         passCounter('The password must be at least 8 characters long')
         warningChecker('Strong')
 
-        cy.get('#sign-up-form-password').clear().type('aA1!a')
+        passValidator('a')
         passCounter('The password must be at least 8 characters long')
         warningChecker('Strong')
 
-        cy.get('#sign-up-form-password').clear().type('aA1!aa')
+        passValidator('a')
         passCounter('The password must be at least 8 characters long')
         warningChecker('Strong')
 
-        cy.get('#sign-up-form-password').clear().type('aA1!aaa')
+        passValidator('a')
         passCounter('The password must be at least 8 characters long')
         warningChecker('Strong')
 
-        cy.get('#sign-up-form-password').clear().type('aA1!aaaa')
+        passValidator('a')
         passCounter(' ')
         warningChecker('Strong')
+
+        cy.get('input[type="checkbox"]').check({force:true})
+        cy.get('button[type="submit"]').click()
+
+        cy.visit('https://practitioner-efelya-test.noveogroup.com/sign-up',{
+            auth: {
+              username: 'owner@efelya.com',
+              password: 'secret4efelya'
+            }})
+
+        
+
+        //Log in button
+        cy.get('p[class="mt-5 has-text-centered"]').find('a').click()
+
+        //Terms and conditions
+        cy.get('span[class="is-relative is-block pl-5"]').find('a').click()
+        cy.url().should('not.include', '/sign-up')
+
+        
+        
     })
 })
