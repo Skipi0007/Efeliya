@@ -1,10 +1,9 @@
+/// <reference types="cypress" />
+import {Auth} from './AuthData'
+
 describe('Efelya', () => {
     it('authSignup', () => {
-        cy.visit('https://practitioner-efelya-test.noveogroup.com/password/reset/57e762f48da8b2985b31877028424cb859975cfdb577628d4a755e5209660dbe?email=seek%40mail.ru',{
-            auth: {
-              username: 'owner@efelya.com',
-              password: 'secret4efelya'
-            }})
+        cy.visit('/password/reset/57e762f48da8b2985b31877028424cb859975cfdb577628d4a755e5209660dbe?email=seek%40mail.ru',Auth)
 
             let passCounter = (alert) => {cy.get('#reset-form-password')
         .parents('div[class="field"]')

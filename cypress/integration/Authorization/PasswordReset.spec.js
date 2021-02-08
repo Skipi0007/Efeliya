@@ -1,12 +1,11 @@
+/// <reference types="cypress" />
+import {Auth, user} from './AuthData'
 
+  
 
 describe('Efelya', () => {
     it('authLogin', () => {
-        cy.visit('https://practitioner-efelya-test.noveogroup.com/forget',{
-            auth: {
-              username: 'owner@efelya.com',
-              password: 'secret4efelya'
-            }})
+        cy.visit('/forget',Auth)
 
         // пустое поле email + кнопка подтверждения
         cy.get('#restore-form-email').click()
@@ -35,7 +34,7 @@ describe('Efelya', () => {
 
         // валидный, существующий email + кнопка подтверждения
         cy.get('#restore-form-email').clear()
-        cy.get('#restore-form-email').type('seek@mail.ru')
+        cy.get('#restore-form-email').type(user.mail)
         cy.get('#restore-form-email').parents('div[class="field mb-6"]')
         .find('.is-danger').should('contain', ' ')
         cy.get('button[type="submit"]').should('not.have.class', 'disabled')
@@ -45,7 +44,7 @@ describe('Efelya', () => {
     });
 
     
-        it.only('emailSubmit', () => {
+        it('emailSubmit', () => {
         cy.visit('https://mailtrap.io/signin')
         
         cy.get('input[type="email"]').type('Ilnar.Kantuganov@noveogroup.com')

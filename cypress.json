@@ -1,1 +1,5 @@
-{}
+{
+    "baseUrl": "http://practitioner-efelya-test.noveogroup.com",
+    "viewportHeight": 1080,
+    "viewportWidth": 1920
+}

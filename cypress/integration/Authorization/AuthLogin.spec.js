@@ -1,10 +1,9 @@
+/// <reference types="cypress" />
+import {Auth, user} from './AuthData'
+
 describe('Efelya', () => {
     it('authLogin', () => {
-        cy.visit('https://practitioner-efelya-test.noveogroup.com/',{
-            auth: {
-              username: 'owner@efelya.com',
-              password: 'secret4efelya'
-            }})
+        cy.visit('/',Auth)
 
            // Forgot your password? переход
          cy.get('[class="mb-6 has-text-right"]').find('a').click()
@@ -47,22 +46,23 @@ describe('Efelya', () => {
         // валидный email + невалидный пароль + кнопка log in
         cy.get('#login-form-email').clear()
         cy.get('#login-form-password').clear()
-        cy.get('#login-form-email').clear().type('seek@mail.ru')
+        cy.get('#login-form-email').clear().type(user.mail)
         cy.get('#login-form-email').parents('div[class="field"]').find('.is-danger').should('contain', ' ')
         cy.get('button[type="submit"]').invoke('attr', 'disabled').should('contain', 'disabled')
-        cy.get('#login-form-password').type('Vi789456')
+        cy.get('#login-form-password').type('123')
         cy.get('#login-form-password').parents('div[class="field"]').find('.is-danger').should('contain', ' ')
         cy.get('button[type="submit"]').should('not.have.class', 'disabled')
         cy.get('button[type="submit"]').click()
         cy.get('#login-form-email').parents('div[class="field"]').find('.is-danger').should('contain', 'These credentials do not match our records.')
+        
 
          // валидный email + валидный пароль + кнопка log in
          cy.get('#login-form-email').clear()
          cy.get('#login-form-password').clear()
-         cy.get('#login-form-email').clear().type('seek@mail.ru')
+         cy.get('#login-form-email').clear().type(user.mail)
          cy.get('#login-form-email').parents('div[class="field"]').find('.is-danger').should('contain', ' ')
          cy.get('button[type="submit"]').invoke('attr', 'disabled').should('contain', 'disabled')
-         cy.get('#login-form-password').type('Vi789456!')
+         cy.get('#login-form-password').type(user.pass)
          cy.get('#login-form-password').parents('div[class="field"]').find('.is-danger').should('contain', ' ')
          cy.get('button[type="submit"]').should('not.have.class', 'disabled')
          cy.get('button[type="submit"]').click()

@@ -1,10 +1,9 @@
+/// <reference types="cypress" />
+import {Auth, user} from './AuthData'
+
 describe('Efelya', () => {
     it('authSignup', () => {
-        cy.visit('https://practitioner-efelya-test.noveogroup.com/sign-up',{
-            auth: {
-              username: 'owner@efelya.com',
-              password: 'secret4efelya'
-            }})
+        cy.visit('/sign-up',Auth)
 
         let passCounter = (alert) => {cy.get('#sign-up-form-password')
         .parents('div[class="field"]')
@@ -25,17 +24,16 @@ describe('Efelya', () => {
         
         }
 
-        let emailNum = ''
+       
 
         function getRandomInt(min, max) {
             min = Math.ceil(min);
             max = Math.floor(max);
-            emailNum = Math.floor(Math.random() * (max - min)) + min;
-            return emailNum
+            return Math.floor(Math.random() * (max - min)) + min;
+            
           }
 
-          getRandomInt(1, 1000
-            )
+          
 
         
 
@@ -65,15 +63,15 @@ describe('Efelya', () => {
         cy.get('button[type="submit"]').invoke('attr', 'disabled')
         .should('contain', 'disabled')
 
-        // существующий email + валидный пароль + кнопка log in
+        // существующий email + валидный пароль + кнопка log in + checkbox
         cy.get('#sign-up-form-email').clear()
         cy.get('#sign-up-form-password').clear()
-        cy.get('#sign-up-form-email').type('seek@mail.ru')
+        cy.get('#sign-up-form-email').type(user.mail)
         cy.get('#sign-up-form-email').parents('div[class="field"]')
         .find('.is-danger').should('contain', ' ')
         cy.get('button[type="submit"]').invoke('attr', 'disabled')
         .should('contain', 'disabled')
-        cy.get('#sign-up-form-password').type('Vi789456!')
+        cy.get('#sign-up-form-password').type(user.pass)
         cy.get('#sign-up-form-password').parents('div[class="field"]')
         .find('.is-danger').should('contain', ' ')
         cy.get('input[type="checkbox"]').should('not.be.checked')
@@ -85,7 +83,8 @@ describe('Efelya', () => {
         
         
         // валидация пароля
-        cy.get('#sign-up-form-email').clear().type('seek'+emailNum+'@mail.ru')
+        cy.get('#sign-up-form-email').clear().type('seek'+getRandomInt(1, 1000
+          )+'@mail.ru')
         passValidator('a')
         passCounter('The password must be at least 8 characters long')
         warningChecker('Weak')
